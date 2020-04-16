@@ -1,0 +1,444 @@
+from tkinter import *
+import tkinter.font
+import RPi.GPIO as GPIO
+from gpiozero import LED
+import time
+
+GPIO.setmode(GPIO.BCM)
+
+##HARDWARE DEFINITIONS
+redLED = LED(4)
+
+##GUI DEFINITIONS
+win=Tk()
+win.title("Morse Code")
+myFont = tkinter.font.Font(family = 'Helvetica', size = 12, weight = "bold")
+nameCode = StringVar()
+win.geometry("+800+300") ##Places top left corner of window at this coordinate
+
+##EVENT FUNCTIONS
+
+def morseConvert(nameCode):
+##Analyses each character for the word in order, calling on each individual symbol's function
+    i = 0
+    while i < len(nameCode):
+        checkCharacter(nameCode[i].lower())
+        i+=1
+
+def wordRetrieve():
+##This function is connected to the button widget, as well as the EnterPressed function.
+##When triggered, the word in the entry box will be saved in the variable nameCode. It
+##will then run a check to make sure the word entered is at most 12 characters long. If it
+##is, run the morseConvert function passing the namecode variable through.
+    nameCode = code.get()
+    if len(nameCode) <= 12:
+        status.config(text="Entered word: {}".format(nameCode))
+        morseConvert(nameCode)
+    else:
+        status.config(text="Word must be 12 characters or less")
+        
+def enterPressed(event):
+##Keyboard shortcut, allows you to press enter to submit
+    wordRetrieve()
+
+def escapePressed(event):
+##Keyboard shortcut, allows you to press escape to exit
+    close()
+    
+def close():
+##Ensures a clean exit when the user requests to exit the application
+    GPIO.cleanup()
+    win.destroy()
+    
+
+
+##WIDGETS
+submitButton = Button(win, text='Submit', font=myFont, command=wordRetrieve, bg="bisque2", height=1)
+submitButton.grid(row=0, column=1)
+
+code = Entry(win, font=myFont, width=12)
+code.grid(row=0, column=0)
+
+status = Label(win)
+status.grid(row=2, column=0)
+status.config(text="Type your word here!")
+
+
+##KEYBOARD SHORTCUTS
+win.bind('<Return>', enterPressed)
+win.bind('<Escape>', escapePressed)
+
+#MORSE CODE FUNCTIONS
+def dot(cnt):
+    for i in range(0, cnt):
+        redLED.on()
+        time.sleep(0.3)
+        redLED.off()
+        shortDelay()
+
+def dash(cnt):
+    for i in range(0, cnt):
+        redLED.on()
+        time.sleep(0.7)
+        redLED.off()
+        shortDelay()
+        
+def shortDelay():
+    time.sleep(0.4)
+
+def longDelay():
+    time.sleep(0.8)
+
+##The conversion for each letter, number and symbol can be found at https://morsecode.world/international/morse2.html
+def isA():
+    dot(1)
+    dash(1)
+    longDelay()
+
+def isB():
+    dash(1)
+    dot(3)
+    longDelay()
+
+def isC():
+    dash(1)
+    dot(1)
+    dash(1)
+    dot(1)
+    longDelay()
+
+def isD():
+    dash(1)
+    dot(2)
+    longDelay()
+
+def isE():
+    dot(1)
+    longDelay()
+
+def isF():
+    dot(2)
+    dash(1)
+    dot(1)
+    longDelay()
+
+def isG():
+    dash(2)
+    dot(1)
+    longDelay()
+
+def isH():
+    dot(4)
+    longDelay()
+
+def isI():
+    dot(2)
+    longDelay()
+
+def isJ():
+    dot(1)
+    dash(3)
+    longDelay()
+
+def isK():
+    dash(1)
+    dot(1)
+    dash(1)
+    longDelay()
+
+def isL():
+    dot(1)
+    dash(1)
+    dot(2)
+    longDelay()
+
+def isM():
+    dash(2)
+    longDelay()
+
+def isN():
+    dash(1)
+    dot(1)
+    longDelay()
+
+def isO():
+    dash(3)
+    longDelay()
+
+def isP():
+    dot(1)
+    dash(2)
+    dot(1)
+    longDelay()
+
+def isQ():
+    dash(2)
+    dot(1)
+    dash(1)
+    longDelay()
+
+def isR():
+    dot(1)
+    dash(1)
+    dot(1)
+    longDelay()
+
+def isS():
+    dot(3)
+    longDelay()
+
+def isT():
+    dash(1)
+    longDelay()
+
+def isU():
+    dot(2)
+    dash(1)
+    longDelay()
+
+def isV():
+    dot(3)
+    dash(1)
+    longDelay()
+
+def isW():
+    dot(1)
+    dash(2)
+    longDelay()
+
+def isX():
+    dash(1)
+    dot(2)
+    dash(1)
+    longDelay()
+
+def isY():
+    dash(1)
+    dot(1)
+    dash(2)
+    longDelay()
+
+def isZ():
+    dash(2)
+    dot(2)
+    longDelay()
+
+def isZero():
+    dash(5)
+    longDelay()
+
+def isOne():
+    dot(1)
+    dash(4)
+    longDelay()
+
+def isTwo():
+    dot(2)
+    dash(3)
+    longDelay()
+
+def isThree():
+    dot(3)
+    dash(2)
+    longDelay()
+
+def isFour():
+    dot(4)
+    dash(1)
+    longDelay()
+
+def isFive():
+    dot(5)
+    longDelay()
+
+def isSix():
+    dash(1)
+    dot(4)
+    longDelay()
+
+def isSeven():
+    dash(2)
+    dot(3)
+    longDelay()
+
+def isEight():
+    dash(3)
+    dot(2)
+    longDelay()
+
+def isNine():
+    dash(4)
+    dot(1)
+    longDelay()
+
+def isSpace():
+##Prosign symbol for "wait", written as two A's without a space in between
+    dot(1)
+    dash(1)
+    dot(1)
+    dash(1)
+    longDelay()
+
+def isAmpersand():
+    dot(1)
+    dash(1)
+    dot(3)
+    longDelay()
+
+def isApostrophe():
+    dot(1)
+    dash(4)
+    dot(1)
+    longDelay()
+
+def isAt():
+    dot(1)
+    dash(2)
+    dot(1)
+    dash(1)
+    dot(1)
+    longDelay()
+
+def isBracketClose():
+    dash(1)
+    dot(1)
+    dash(2)
+    dot(1)
+    dash(1)
+    longDelay()
+
+def isBracketOpen():
+    dash(1)
+    dot(1)
+    dash(2)
+    dot(1)
+    longDelay()
+
+def isColon():
+    dash(3)
+    dot(3)
+    longDelay()
+
+def isComma():
+    dash(2)
+    dot(2)
+    dash(2)
+    longDelay()
+
+def isEqual():
+    dash(1)
+    dot(3)
+    dash(1)
+    longDelay()
+
+def isExclamation():
+    dash(1)
+    dot(1)
+    dash(1)
+    dot(1)
+    dash(2)
+    longDelay()
+
+def isPeriod():
+    dot(1)
+    dash(1)
+    dot(1)
+    dash(1)
+    dot(1)
+    dash(1)
+    longDelay()
+
+def isHyphen():
+    dash(1)
+    dot(4)
+    dash(1)
+    longDelay()
+
+def isPlus():
+    dot(1)
+    dash(1)
+    dot(1)
+    dash(1)
+    dot(1)
+    longDelay()
+
+def isQuotation():
+    dot(1)
+    dash(1)
+    dot(2)
+    dash(1)
+    dot(1)
+    longDelay()
+
+def isQuestion():
+    dot(2)
+    dash(2)
+    dot(2)
+    longDelay()
+
+def isSlash():
+    dash(1)
+    dot(2)
+    dash(1)
+    dot(1)
+    longDelay()
+
+def checkCharacter(char):
+#When called, will call the function for the current character being examined
+    if char == 'a': isA()
+    if char == 'b': isB()
+    if char == 'c': isC()
+    if char == 'd': isD()
+    if char == 'e': isE()
+    if char == 'f': isF()
+    if char == 'g': isG()
+    if char == 'h': isH()
+    if char == 'i': isI()
+    if char == 'j': isJ()
+    if char == 'k': isK()
+    if char == 'l': isL()
+    if char == 'm': isM()
+    if char == 'n': isN()
+    if char == 'o': isO()
+    if char == 'p': isP()
+    if char == 'q': isQ()
+    if char == 'r': isR()
+    if char == 's': isS()
+    if char == 't': isT()
+    if char == 'u': isU()
+    if char == 'v': isV()
+    if char == 'w': isW()
+    if char == 'x': isX()
+    if char == 'y': isY()
+    if char == 'z': isZ()
+    if char == ' ': isSpace()
+    if char == '0': isZero()
+    if char == '1': isOne()
+    if char == '2': isTwo()
+    if char == '3': isThree()
+    if char == '4': isFour()
+    if char == '5': isFive()
+    if char == '6': isSix()
+    if char == '7': isSeven()
+    if char == '8': isEight()
+    if char == '9': isNine()
+    if char == '&': isAmpersand
+    if char == "'": isApostrophe()
+    if char == '@': isAt()
+    if char == ')': isBracketClose()
+    if char == '(': isBracketOpen()
+    if char == ':': isColon()
+    if char == ',': isComma()
+    if char == '=': isEqual()
+    if char == '!': isExclamation()
+    if char == '.': isPeriod()
+    if char == '-': isHyphen()
+    if char == '+': isPlus()
+    if char == '"': isQuotation()
+    if char == '?': isQuestion()
+    if char == '/': isSlash()
+
+##SYSTEM TOOLS
+win.protocol("WM_DELETE_WINDOW", close)
+
+win.mainloop()
